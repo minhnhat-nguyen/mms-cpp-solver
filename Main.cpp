@@ -22,7 +22,8 @@ void log(const std::string& text) { std::cerr << text << std::endl; }
 void debugBFS() {
   for (int y = 0; y < MAZE_HEIGHT; ++y) {
     for (int x = 0; x < MAZE_WIDTH; ++x)
-      API::setText(x, y, (bfs_map[y][x] == INF) ? "INF" : std::to_string(bfs_map[y][x]));
+      API::setText(
+          x, y, (bfs_map[y][x] == INF) ? "INF" : std::to_string(bfs_map[y][x]));
   }
 }
 
@@ -190,9 +191,9 @@ int getBestMove() {
 }
 
 void reset() {
-    API::ackReset();
-    currPos = startPos;
-    facing = 1;
+  API::ackReset();
+  currPos = startPos;
+  facing = 1;
 }
 
 void move(const int dir) {
@@ -204,18 +205,53 @@ void move(const int dir) {
   currPos += drs[dir];
 }
 
-
 int main(int argc, char* argv[]) {
-    log("Running...");
-    API::setColor(0, 0, 'G');
-    API::setText(0, 0, "abc");
-    while (true) {
-        if (!API::wallLeft()) {
-            API::turnLeft();
-        }
-        while (API::wallFront()) {
-            API::turnRight();
-        }
-        API::moveForward();
+  /*log("Running...");
+  API::setColor(0, 0, 'G');
+  API::setText(0, 0, "abc");
+  while (true) {
+      if (!API::wallLeft()) {
+          API::turnLeft();
+      }
+      while (API::wallFront()) {
+          API::turnRight();
+      }
+      API::moveForward();
+  }*/
+  init();
+  updateSurrounding();
+  bfs();
+  debugBFS();
+  std::stack<pos> path;
+  int bestDir;
+  while (true) {
+    while (!isFinish()) {
+      path.push(currPos);
+      bestDir = getBestMove();
+      while (bestDir == -1) {
+        std::cerr << "No path found!" << std::endl;
+        return 0;
+      }
+      move(bestDir);
+      API::setColor(currPos.x, currPos.y, 'G');
+      updateSurrounding();
+      bfs();
+      debugBFS();
     }
+    reset();
+    if (path.size() == bfs_map[0][0]) break;
+    path = std::stack<pos>();
+  }
+  log("Done explore!");
+  log("Run to finish!");
+  while (!isFinish()) {
+    bestDir = getBestMove();
+    move(bestDir);
+    API::setColor(currPos.x, currPos.y, 'B');
+    updateSurrounding();
+    bfs();
+    debugBFS();
+  }
+  logMap();
+  return 0;
 }
