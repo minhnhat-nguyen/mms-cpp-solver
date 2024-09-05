@@ -54,6 +54,20 @@ void API::moveForward(int distance) {
     }
 }
 
+void API::moveForwardHalf(int numHalfSteps) {
+    std::cout << "moveForwardHalf ";
+    if (numHalfSteps != 1) {
+        std::cout << numHalfSteps;
+    }
+    std::cout << std::endl;
+    std::string response;
+    std::cin >> response;
+    if (response != "ack") {
+        std::cerr << response << std::endl;
+        throw;
+    }
+}
+
 void API::turnRight() {
     std::cout << "turnRight" << std::endl;
     std::string ack;
@@ -62,6 +76,18 @@ void API::turnRight() {
 
 void API::turnLeft() {
     std::cout << "turnLeft" << std::endl;
+    std::string ack;
+    std::cin >> ack;
+}
+
+void API::turnRight45() {
+    std::cout << "turnRight45" << std::endl;
+    std::string ack;
+    std::cin >> ack;
+}
+
+void API::turnLeft45() {
+    std::cout << "turnLeft45" << std::endl;
     std::string ack;
     std::cin >> ack;
 }
