@@ -1,3 +1,5 @@
+This is a fork from mackorone/mms which is fully implemented with A* and BFS algorithms. The video of the simulation can be found [here](https://youtu.be/uU-TTji19IQ).
+
 # mms-cpp
 
 Write a Micromouse maze-solving algorithm in C++.
